@@ -1,0 +1,244 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: "Comfortaa", sans-serif;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    background-image: url("images/background.jpeg");
+}
+
+.header {
+    font-size: 1.5em;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(100, 148, 237, 0.65);
+    color: #f0f0f0;
+    border-radius: 0 0 20px 20px;
+    backdrop-filter: blur(5px);
+}
+
+
+input, select {
+    border-radius: 6px;
+    padding: 0.5em;
+}
+
+select {
+    cursor: pointer;
+}
+
+input[type=button] {
+    border: #333 solid 2px;
+    /* background-color: antiquewhite; */
+}
+
+button {
+    cursor: pointer;
+}
+
+img {
+    width: 85%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.application {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    gap: 50px;
+    margin: 20px 40px;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.glass {
+    background-color: rgba(255, 255, 255, .15);
+    backdrop-filter: blur(10px);
+}
+
+.submit_btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: #333 2px solid;
+}
+
+.submit_btn:hover {
+    background-color: cornflowerblue;
+    color: white;
+    transform: scale(1.2);
+}
+
+.submit_btn:active {
+    transform: none;
+}
+
+.input_container {
+    background-color: rgba(255, 127, 80, 0.75);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.flex_column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+#form {
+    background-color: antiquewhite;
+    padding: 10px;
+    height: 80%;
+    width: 60%;
+    position: relative;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+#form > .flex_column {
+    height: 50%;
+}
+
+#form label, p {
+    font-weight: 800;
+}
+
+#form label {
+    margin-right: 5px;
+}
+
+
+#form::before {
+    content: "Cупер форма 1337 :D";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: coral;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    color: white;
+    font-weight: 900;
+    font-size: 1.25em;
+}
+
+.r_container label {
+    padding-right: 10px;
+}
+
+.incorrect_input {
+    position: relative;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.incorrect_input::before {
+    content: "Введите корректное значение!";
+    animation: fadeIn 0.4s ease;
+    display: block;
+    color: red;
+    font-weight: 900;
+    position: absolute;
+    bottom: -45px;
+    height: 40px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: fit-content;
+    text-align: center;
+}
+
+.image_and_table_container {
+    width: 30%;
+    text-align: center;
+}
+
+.geometryObj {
+    fill: rgb(4, 182, 123);
+    transition: 0.3s;
+}
+
+.geometryObj:hover {
+    fill: rgb(0, 134, 91);
+}
+
+#svgArea {
+    background-color: antiquewhite;
+    padding: 20px;
+    border-radius: 10px;
+    box-sizing: content-box;
+    cursor: pointer;
+}
+
+.point {
+    fill: #ff4700;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@media (max-width: 835px) {
+    .application {
+        margin: 10px;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        height: min-content;
+        overflow: auto;
+        padding: 150px 5px 20px;
+        gap: 20px;
+    }
+
+    #form {
+        width: 95%;
+        min-height: 300px;
+        overflow: auto;
+    }
+
+    .image_and_table_container {
+        width: 80%;
+    }
+
+    table {
+        max-height: 100px;
+    }
+
+}
+
+@media (max-width: 580px) {
+    .image_and_table_container {
+        width: 95%;
+    }
+}
