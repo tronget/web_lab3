@@ -5,7 +5,93 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-   <f:view>
-      <h:outputLabel value="Hello, world"/>
-   </f:view>
+<h:head>
+    <title>Lab 3 | Main</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <h:outputStylesheet library="styles" name="starter.css"/>
+    <h:outputStylesheet library="styles" name="styles.css"/>
+    <h:outputStylesheet library="styles" name="header.css"/>
+    <h:outputStylesheet library="styles" name="fonts.css"/>
+    <h:outputStylesheet library="styles" name="table.css"/>
+</h:head>
+<h:body>
+    <h:panelGroup layout="block" styleClass="header">
+        <h:outputText value="Лашкул Андрей Владимирович P3210 5558882" />
+    </h:panelGroup>
+
+    <div class="application glass">
+        <h:form id="form" styleClass="input_container">
+            <h:panelGroup layout="block" styleClass="r_container">
+                <h:outputLabel for="r_select" value="Выберите R:" />
+                <h:selectOneRadio onchange="markR()" id="r_select" value="#{dotBean.r}">
+                    <f:selectItem itemValue="1" itemLabel="1" />
+                    <f:selectItem itemValue="2" itemLabel="2" />
+                    <f:selectItem itemValue="3" itemLabel="3" />
+                    <f:selectItem itemValue="4" itemLabel="4" />
+                    <f:selectItem itemValue="5" itemLabel="5" />
+                </h:selectOneRadio>
+            </h:panelGroup>
+
+            <h:panelGroup layout="block" styleClass="flex_column">
+                <h:panelGroup layout="block" styleClass="input_container x_container">
+                    <h:outputLabel for="x_select" value="Выберите X:" />
+                    <h:selectOneMenu onchange="markX()" id="x_select" value="#{dotBean.x}">
+                        <f:selectItem itemValue="-3" itemLabel="-3" />
+                        <f:selectItem itemValue="-2" itemLabel="-2" />
+                        <f:selectItem itemValue="-1" itemLabel="-1" />
+                        <f:selectItem itemValue="0" itemLabel="0" />
+                        <f:selectItem itemValue="1" itemLabel="1" />
+                        <f:selectItem itemValue="2" itemLabel="2" />
+                        <f:selectItem itemValue="3" itemLabel="3" />
+                    </h:selectOneMenu>
+                </h:panelGroup>
+
+                <h:inputHidden id="hidden_x" value="#{dotBean.x}" />
+
+                <div class="input_container y_container">
+                    <h:inputHidden onblur="markY()" id="y_input" value="#{dotBean.y}"
+                                 placeholder="Введите Y (-3 до 5)">
+                    </h:inputHidden>
+                    <h:outputLabel for="y_input_correct" value="Введите Y:" />
+                    <h:inputText id="y_input_correct" placeholder="Введите Y (-3 до 5)" />
+                </div>
+            </h:panelGroup>
+
+            <h:commandButton
+                    value="Отправить"
+                    action="#{formHandler.handle()}"
+                    styleClass="submit_btn"
+            >
+                <f:ajax render="table" execute="@form" />
+            </h:commandButton>
+        </h:form>
+
+        <div class="image_and_table_container">
+            <ui:include src="svgContent.html"/>
+            <div class="table-container">
+                <h:dataTable value="#{resultsBean.results}" var="res" update="@form" id="table" styleClass="table-container">
+                    <h:column>
+                        <f:facet name="header">X</f:facet>
+                        #{res.dot.x}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Y</f:facet>
+                        #{res.dot.y}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">R</f:facet>
+                        #{res.dot.r}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Is hit</f:facet>
+                        #{res.hit ? "Yes" : "No"}
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </div>
+    </div>
+</h:body>
+
+<h:outputScript library="scripts" name="script.js" />
+
 </html>

@@ -3,9 +3,27 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-   <f:view>
-      <h:outputLabel value="Hello, world"/>
-   </f:view>
+      xmlns:t="customComponents">
+<h:head>
+    <title>Lab 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <h:outputStylesheet library="styles" name="fonts.css"/>
+    <h:outputStylesheet library="styles" name="starter.css"/>
+    <h:outputStylesheet library="styles" name="index.css"/>
+    <h:outputStylesheet library="styles" name="header.css"/>
+</h:head>
+
+<h:body>
+    <h:panelGroup layout="block" styleClass="header">
+        <h:outputText value="Лашкул Андрей Владимирович P3210 5558882" />
+    </h:panelGroup>
+
+    <t:clockComponent/>
+
+    <h:panelGroup>
+        <h:link styleClass="button" value="Главная страница" outcome="main?faces-redirect=true" />
+    </h:panelGroup>
+</h:body>
+
+<h:outputScript library="scripts" name="clock.js" />
 </html>

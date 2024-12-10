@@ -1,0 +1,35 @@
+.button {
+    display: block;
+    padding: 10px;
+    width: 400px;
+    font-size: 32px;
+    transition: 0.2s;
+    border: #333 2px solid;
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: darkcyan;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #ff4700;
+    transform: scale(1.2);
+}
+
+.submit_btn:active {
+    transform: none;
+}
+
+.clock {
+    text-align: center;
+    margin: 20px auto;
+    padding: 10px;
+    width: 90%;
+    border-radius: 10px;
+    background-color: #721c24;
+    font-weight: bold;
+    color: #f0f0f0;
+    font-size: 2em;
+}

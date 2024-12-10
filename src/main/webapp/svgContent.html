@@ -1,10 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
 <body>
-$END$
+<div style="position: relative;">
+    <svg id="svgArea" height="300" width="300">
+
+        <rect x="150" y="150" width="100" height="100" class="geometryObj"></rect>
+        <polygon points="150,100 150,150 250,150" class="geometryObj"></polygon>
+        <path d="M150,150 V200 H150 A 50 50, 0, 0, 1, 100 150" class="geometryObj"></path>
+
+        <!-- Ось X -->
+        <line stroke="black" x1="0" x2="300" y1="150" y2="150"></line>
+        <line stroke="black" x1="290" x2="300" y1="145" y2="150"></line>
+        <line stroke="black" x1="290" x2="300" y1="155" y2="150"></line>
+        <text fill="black" x="288" y="140">X</text>
+
+        <!-- Ось Y -->
+        <line stroke="black" x1="150" x2="150" y1="0" y2="300"></line>
+        <line stroke="black" x1="150" x2="155" y1="0" y2="10"></line>
+        <line stroke="black" x1="150" x2="145" y1="0" y2="10"></line>
+        <text fill="black" x="160" y="12">Y</text>
+
+        <!-- Метки для X и Y -->
+        <line stroke="black" x1="50" x2="50" y1="153" y2="147"></line>
+        <line stroke="black" x1="100" x2="100" y1="153" y2="147"></line>
+        <line stroke="black" x1="200" x2="200" y1="153" y2="147"></line>
+        <line stroke="black" x1="250" x2="250" y1="153" y2="147"></line>
+        <text fill="black" x="35" y="140" font-size="12">-R</text>
+        <text fill="black" x="90" y="140" font-size="12">-R/2</text>
+        <text fill="black" x="188" y="140" font-size="12">R/2</text>
+        <text fill="black" x="245" y="140" font-size="12">R</text>
+
+        <line stroke="black" x1="147" x2="153" y1="50" y2="50"></line>
+        <line stroke="black" x1="147" x2="153" y1="100" y2="100"></line>
+        <line stroke="black" x1="147" x2="153" y1="200" y2="200"></line>
+        <line stroke="black" x1="147" x2="153" y1="250" y2="250"></line>
+        <text fill="black" x="160" y="55" font-size="12">R</text>
+        <text fill="black" x="160" y="105" font-size="12">R/2</text>
+        <text fill="black" x="160" y="205" font-size="12">-R/2</text>
+        <text fill="black" x="160" y="255" font-size="12">-R</text>
+    </svg>
+    <div id="popup" style="animation: fadeIn 0.4s ease; display: none; position: absolute; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 8px; border-radius: 4px; font-size: 14px;">
+        Недопустимые координаты!
+    </div>
+</div>
 </body>
 </html>

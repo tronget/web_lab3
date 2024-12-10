@@ -8,8 +8,7 @@
   },
   "files": [
     "script.ts",
-    "functions.ts",
-    "variables.ts"
+    "clock.ts"
   ],
   "include": [
     "../../.eslintrc.js"

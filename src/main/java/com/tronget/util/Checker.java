@@ -1,2 +1,5 @@
-package com.tronget.util;public interface Checker {
+package com.tronget.util;
+
+public interface Checker <T> {
+    boolean check(T obj);
 }

@@ -1,39 +1,82 @@
-import {addClassUntilTrue, checkBoundaries} from "./functions.js";
-import {
-  form,
-  rContainer,
-  rCheckboxes,
-  svgArea,
-  table,
-  xContainer,
-  xSelect,
-  yContainer,
-  yInput,
-} from "./variables.js";
+const xContainer: HTMLElement = document.querySelector(".x_container");
+const yContainer: HTMLElement = document.querySelector(".y_container");
+const rContainer: HTMLElement = document.querySelector(".r_container");
+const xSelect = document.getElementById("form:x_select") as HTMLSelectElement;
+const yInput = document.getElementById("form:y_input") as HTMLInputElement;
+const hiddenXInput = document.getElementById("form:hidden_x") as HTMLInputElement;
+const rOptions: HTMLInputElement[] = Array.from(
+  document.querySelectorAll(".r_container input[type='radio']"),
+);
+const form = document.getElementById("form") as HTMLFormElement;
+const table = document.getElementById("table");
+const svgArea = document.getElementById("svgArea");
+const submitBtn: HTMLButtonElement = document.querySelector(".submit_btn");
 
-rCheckboxes.forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    if (this.checked) {
-      rCheckboxes.forEach(cb => {
-        if (cb !== this) {
-          cb.checked = false;
-        }
-      });
-    }
+const yInputCorrect = document.getElementById("form:y_input_correct") as HTMLInputElement;
+
+yInputCorrect.addEventListener("change", () => {
+  yInput.value = yInputCorrect.value;
+});
+
+interface Point {
+  x: number;
+  y: number;
+  isHit: boolean;
+}
+
+let svgFlag = false;
+
+window.addEventListener("load", () => {
+  const points = getSavedPoints();
+  points.forEach(point => {
+    drawPoint(point);
   });
 });
+
+const checkBoundaries = (
+  num: number,
+  left: number,
+  right: number,
+): boolean => left <= num && num <= right;
+
+const addClass = (el: HTMLElement, className: string): void => {
+  el.classList.add(className);
+};
+
+const removeClass = (el: HTMLElement, className: string): void => {
+  el.classList.remove(className);
+};
+
+type CheckHandler = () => boolean;
+
+const addClassUntilTrue = (
+  condition: CheckHandler,
+  el: HTMLElement,
+  className: string,
+): void => {
+  if (!condition()) {
+    addClass(el, className);
+    return;
+  }
+  removeClass(el, className);
+};
+
 
 const getX = (): number => {
   return Number(xSelect.value);
 };
 
+xSelect.addEventListener("change", () => {
+  hiddenXInput.value = xSelect.value;
+})
+
 const getY = (): number => {
-  return yInput.valueAsNumber;
+  return yInput.value === "" ? NaN : Number(yInput.value);
 };
 
 const getR = (): number => {
   // eslint-disable-next-line no-restricted-syntax
-  for (const el of rCheckboxes) {
+  for (const el of rOptions) {
     if (el.checked) {
       return Number(el.value);
     }
@@ -41,16 +84,17 @@ const getR = (): number => {
   return NaN;
 };
 
-const checkY = (): boolean => {
-  const value: number = getY();
+
+const checkX = (): boolean => {
+  const value: number = getX();
 
   if (Number.isNaN(value)) return false;
 
   return checkBoundaries(value, -3, 3);
 };
 
-const checkX = (): boolean => {
-  const value: number = getX();
+const checkY = (): boolean => {
+  const value: number = getY();
 
   if (Number.isNaN(value)) return false;
 
@@ -83,77 +127,14 @@ const markAll = () => {
   markR();
 };
 
-xSelect.addEventListener("change", markX);
-
-yInput.addEventListener("blur", markY);
-
-const sendRequest = async (request: Request) => {
-  try {
-    const response = await fetch(request);
-
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(error.message);
-    return null;
-  }
-};
-
-const sendDot = (
-  x: number,
-  y: number,
-  r: number,
-): Promise<Record<string, any>> => {
-  const request = new Request("http://localhost:8080/lab2_correct-1.0-SNAPSHOT/api", {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify({
-      x: x,
-      y: y,
-      r: r,
-    }),
-  });
-  return sendRequest(request);
-};
-
-const addDotToTheTable = (dotInfo: Record<string, any>) => {
-  if (dotInfo == null) {
-    return;
-  }
-
-  table.innerHTML += `
-        <tbody>
-            <tr>
-                <td>${dotInfo.dot.x}</td>
-                <td>${dotInfo.dot.y}</td>
-                <td>${dotInfo.dot.r}</td>
-                <td>${dotInfo.hit}</td>
-                <td>${dotInfo.time}</td>
-            </tr>
-        </tbody>
-    `;
-};
-
-const sendAndAddDot = async (x: number, y: number, r: number) => {
-  const dotInfo = await sendDot(x, y, r);
-  addDotToTheTable(dotInfo);
-};
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  if (!(checkR() && checkX() && checkY())) {
-    markAll();
-    return;
+submitBtn.addEventListener("click", () => {
+  if (svgFlag) {
+    xSelect.value = hiddenXInput.value;
+    svgFlag = false;
+  } else {
+    hiddenXInput.value = xSelect.value;
   }
   markAll();
-  await sendAndAddDot(getX(), getY(), getR());
-  form.reset();
 });
 
 svgArea.addEventListener("click", async (e) => {
@@ -163,24 +144,83 @@ svgArea.addEventListener("click", async (e) => {
   }
   markR();
   const rect = svgArea.getBoundingClientRect();
-  let x = e.clientX - rect.left - 20;
-  let y = e.clientY - rect.top - 20;
-
-  const point = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  point.setAttribute("cx", String(x));
-  point.setAttribute("cy", String(y));
-  point.setAttribute("r", "3");
-  point.classList.add("point");
-  point.style.transformOrigin = `${x}px ${y}px`;
+  const xWindow = e.clientX - rect.left - 20;
+  const yWindow = e.clientY - rect.top - 20;
 
   const r = getR();
-  x = Number((((x - 150) / 100) * r).toFixed(3));
-  y = Number((((150 - y) / 100) * r).toFixed(3));
+  const x = Number((((xWindow - 150) / 100) * r).toFixed(2));
+  const y = Number((((150 - yWindow) / 100) * r).toFixed(2));
 
-  const dotInfo = await sendDot(x, y, r);
-  if (dotInfo.hit) {
+  if (!checkBoundaries(x, -3, 3) || !checkBoundaries(y, -3, 5)) {
+    addPopupWindow(xWindow, yWindow);
+    return;
+  }
+
+  const point: Point = {x: xWindow, y: yWindow, isHit: false};
+
+  hiddenXInput.value = String(x);
+  yInput.value = String(y);
+
+  svgFlag = true;
+
+  submitBtn.click();
+
+  setTimeout(() => {
+    const list: HTMLTableRowElement[] = Array.from(
+      document.querySelectorAll("#table tr")
+    );
+    const lastRow = list[list.length - 1];
+    const isHit = lastRow.querySelectorAll("td")[3];
+    if (isHit.textContent.trim() === "Yes") {
+      point.isHit = true;
+    }
+    drawPoint(point);
+    savePoint(point);
+  }, 400);
+
+});
+
+const addPopupWindow = (x: number, y: number) => {
+
+  const popupWindow = document.createElement("div");
+  popupWindow.style.position = "absolute";
+  popupWindow.style.background = "#f8d7da";
+  popupWindow.style.color = "#721c24";
+  popupWindow.style.border = "1px solid #f5c6cb";
+  popupWindow.style.padding = "8px";
+  popupWindow.style.borderRadius = "4px";
+  popupWindow.style.fontSize = "14px";
+  popupWindow.style.animation = "fadeIn 0.4s ease";
+  popupWindow.textContent = "Недопустимые координаты!";
+  popupWindow.style.left = `${x}px`;
+  popupWindow.style.top = `${y}px`;
+
+  svgArea.parentElement.appendChild(popupWindow);
+
+  setTimeout(() => {
+    popupWindow.remove();
+  }, 2000);
+}
+
+const getSavedPoints = (): Point[] => {
+  return JSON.parse(localStorage.getItem("points")) || [];
+};
+
+const savePoint = (pointObj: Point) => {
+  const points = getSavedPoints();
+  points.push(pointObj);
+  localStorage.setItem("points", JSON.stringify(points));
+};
+
+const drawPoint = (pointObj: Point) => {
+  const point = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  point.setAttribute("cx", String(pointObj.x));
+  point.setAttribute("cy", String(pointObj.y));
+  point.setAttribute("r", "3");
+  point.classList.add("point");
+  point.style.transformOrigin = `${pointObj.x}px ${pointObj.y}px`;
+  if (pointObj.isHit) {
     point.style.fill = "blue";
   }
   svgArea.appendChild(point);
-  addDotToTheTable(dotInfo);
-});
+}
