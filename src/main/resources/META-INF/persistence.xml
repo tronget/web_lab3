@@ -9,7 +9,7 @@
         <class>com.tronget.model.Dot</class>
 
         <properties>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/web_lab3"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://db:5432/web_lab3"/>
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="postgres"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
